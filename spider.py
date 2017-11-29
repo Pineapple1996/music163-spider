@@ -24,19 +24,8 @@ headers = {
 }
 
 url="http://music.163.com/"  
-# proxies=["111.195.228.237:8123",'http://110.189.207.29:28412','http://121.205.254.42:808',
-#          "121.232.146.143:9000",
-#          "223.247.207.173:8998",
-#          "218.104.148.157:8080",
-#          "122.236.168.156:8998",
-#         'http://183.32.88.182:808',
-#         'http://219.138.58.167:3128',
-#          'http://121.226.161.90:808',
-#          'http://118.254.124.200:808',
-#          'http://58.22.101.138:808',
-#          'http://114.230.96.132:43840',
-#          'http://171.37.160.99:8123'
-#          ]
+
+
 # 设置代理服务器
 def get_ip_list(url, headers):
     web_data = requests.get(url, headers=headers)
@@ -48,13 +37,14 @@ def get_ip_list(url, headers):
         tds = ip_info.find_all('td')
         ip_list.append(tds[1].text + ':' + tds[2].text)
     return ip_list
+
+
 #随机代理ip
 def get_random_ip(ip_list):
     proxy_list = []
     for ip in ip_list:
         proxy_list.append(ip)
     proxy_ip = random.choice(proxy_list)
-
     return proxy_ip
 
 
@@ -69,6 +59,9 @@ def changable_proxies():
     proxies = get_random_ip(ip_list)
     print proxies
     return proxies
+
+
+
 # offset的取值为:(评论页数-1)*20,total第一页为true，其余页为false
 # first_param = '{rid:"", offset:"0", total:"true", limit:"20", csrf_token:""}' # 第一个参数
 second_param = "010001" # 第二个参数
@@ -116,8 +109,6 @@ def get_json(url, params, encSecKey):
          "params": params,
          "encSecKey": encSecKey
     }
-
-
     try:
      response = requests.post(url, headers=headers, data=data,proxies = changable_proxies())
     except Exception as e:
@@ -126,7 +117,8 @@ def get_json(url, params, encSecKey):
      s.keep_alive = False
     # response = requests.post(url, headers=headers, data=data,proxies = proxies)
     return response.content
- 
+
+
 # 抓取热门评论，返回热评列表
 def get_hot_comments(url):
     hot_comments_list = []
@@ -165,9 +157,6 @@ def get_all_comments(url):
     global mach
     mach = page
     for i in range(page):  # 逐页抓
-        #if(i%500==0):
-         # time.sleep(100)
-          #time.sleep(int(format(random.randint(0,3))))
         params = get_params(i+1)
         encSecKey = get_encSecKey()
         json_text = get_json(url,params,encSecKey)
@@ -193,32 +182,9 @@ def save_to_file(list,filename):
             f.writelines(list)
         print("写入文件成功!")
 
-#
-# def getSongs(id):  # 这里的id是歌单的id
-#     listurl = 'http://music.163.com/playlist?id=' + id
-#     r = requests.get(listurl)
-#
-#     tree = html.fromstring(r.text)
-#     data_json = tree.xpath('//textarea[@style="display:none;"]')[0].text
-#
-#     songs = json.loads(data_json)
-#     return songs
 
 if __name__ == "__main__":
-    # songs=getSongs('961076463')
-    # for song in songs:
-    #     songid=str(song['id'])
-    #     songname=str(song['name'])
-    #     start_time = time.time() # 开始时间
-    #     url = "http://music.163.com/weapi/v1/resource/comments/R_SO_4_"+songid+"/?csrf_token="
-    #     filename = song['artists'][0]['name']+"-"+song['name']+u".txt"
-    #     all_comments_list = get_all_comments(url)
-    #     save_to_file(all_comments_list,filename)
-    #     end_time = time.time() #结束时间
-    #     print song['artists'][0]['name']+"-"+song['name']+'已抓取完毕！'
-    #     print("程序耗时%f秒." % (end_time - start_time))
     start_time = time.time()  # 开始时间
-
     url = "http://music.163.com/weapi/v1/resource/comments/R_SO_4_186016/?csrf_token="
     filename = u"晴天.txt"
     all_comments_list = get_all_comments(url)

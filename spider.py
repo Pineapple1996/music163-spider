@@ -1,15 +1,17 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
+from Cryptodome.Cipher import AES
 from bs4 import BeautifulSoup
 from lxml import html
-from Crypto.Cipher import AES
+# from Crypto.Cipher import AES
 import base64
 import requests
 import json
 import codecs
 import time
 import random 
-import urllib2  
+# import urllib2
+
 
 # 头部信息
 headers = {
@@ -57,7 +59,7 @@ ip_list = get_ip_list('http://www.xicidaili.com/nn/', headers=headers2)
 
 def changable_proxies():
     proxies = get_random_ip(ip_list)
-    print proxies
+    print (proxies)
     return proxies
 
 

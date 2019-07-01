@@ -57,7 +57,7 @@ ip_list = get_ip_list('http://www.xicidaili.com/nn/', headers=headers2)
 
 def changable_proxies():
     proxies = get_random_ip(ip_list)
-    print proxies
+    print (proxies)
     return proxies
 
 
